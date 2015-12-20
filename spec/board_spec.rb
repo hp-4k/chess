@@ -6,6 +6,25 @@ module Chess
     
     let(:board) { Board.new }
     
+    describe ".offset_square(from, columns, rows)" do
+      it "returns the correct square" do
+        expect(Board.offset_square("A1", 1, 1)).to eq "B2"
+        expect(Board.offset_square("B3", 5, 3)).to eq "G6"
+        expect(Board.offset_square("H1", 0, 4)).to eq "H5"
+        expect(Board.offset_square("B6", 5, 0)).to eq "G6"
+        expect(Board.offset_square("G7", -3, -4)).to eq "D3"
+      end
+      
+      it "returns nil if the new square is outside the board" do
+        expect(Board.offset_square("A1", -1, -1)).to be nil
+        expect(Board.offset_square("H8", 4, 0)).to be nil
+      end
+      
+      it "raises InvalidSquareError if starting square is not valid" do
+        expect { Board.offset_square("I3", -3, -2) }.to raise_error Board::InvalidSquareError
+      end
+    end
+    
     describe "#place_piece(piece, square)" do
       context "when given a valid square" do
         it "puts the piece on the given square" do
