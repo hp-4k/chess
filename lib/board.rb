@@ -2,17 +2,28 @@ module Chess
 
   class Board
     
+    def self.valid_square?(square)
+      square[0].upcase.between?('A', 'H') && square[1].to_i.between?(1, 8)
+    end
+    
+    def self.offset_square(from, columns, rows)
+      raise InvalidSquareError unless valid_square?(from)
+      column, row = from[0].upcase, from[1]
+      new_square = "#{(column.ord + columns).chr}#{row.to_i + rows}"
+      valid_square?(new_square) ? new_square : nil
+    end
+    
     def initialize
       @squares = {}
     end
     
     def place_piece(piece, square)
-      check_validity(square)
+      raise InvalidSquareError unless Board.valid_square?(square)
       squares[square] = piece
     end
     
     def get_square(square)
-      check_validity(square)
+      raise InvalidSquareError unless Board.valid_square?(square)
       squares[square]
     end
     
@@ -31,10 +42,6 @@ module Chess
     private
     
       attr_accessor :squares
-      
-      def check_validity(square)
-        raise InvalidSquareError unless square[0].upcase.between?('A', 'H') && square[1].to_i.between?(1, 8)
-      end
       
       def print_square(square)
         $stdout.print(get_square(square) || "_")
