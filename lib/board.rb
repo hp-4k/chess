@@ -16,12 +16,28 @@ module Chess
       squares[square]
     end
     
+    def show_board
+      8.downto(1) do |row|
+        $stdout.print row
+        'A'.upto('H') do |col|
+          $stdout.print " "
+          print_square(col + row.to_s)
+        end
+        $stdout.print "\n"
+      end
+      $stdout.puts "  A B C D E F G H"
+    end
+    
     private
     
       attr_accessor :squares
       
       def check_validity(square)
         raise InvalidSquareError unless square[0].upcase.between?('A', 'H') && square[1].to_i.between?(1, 8)
+      end
+      
+      def print_square(square)
+        $stdout.print(get_square(square) || "_")
       end
     
     class InvalidSquareError < ArgumentError

@@ -46,6 +46,29 @@ module Chess
       end
     end
     
+    describe "#show_board" do
+      context "with an empty board" do
+        
+        it "prints the board to standard output" do
+          expected_output = <<END_STRING
+8 _ _ _ _ _ _ _ _
+7 _ _ _ _ _ _ _ _
+6 _ _ _ _ _ _ _ _
+5 _ _ _ _ _ _ _ _
+4 _ _ _ _ _ _ _ _
+3 _ _ _ _ _ _ _ _
+2 _ _ _ _ _ _ _ _
+1 _ _ _ _ _ _ _ _
+  A B C D E F G H
+END_STRING
+          expect { board.show_board }.to output(expected_output).to_stdout
+        end
+        
+        context "with pieces on the board"
+        
+      end
+    end
+    
   end
 
 end
