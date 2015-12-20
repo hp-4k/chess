@@ -2,8 +2,17 @@ module Chess
 
   class Knight < Piece
     
-    def valid_moves(board, square)
-      
+    def valid_moves(square)
+      moves = []
+      moves << Piece.offset_square(square, 1, 2)
+      moves << Piece.offset_square(square, 2, 1)
+      moves << Piece.offset_square(square, 2, -1)
+      moves << Piece.offset_square(square, 1, -2)
+      moves << Piece.offset_square(square, -1, -2)
+      moves << Piece.offset_square(square, -2, -1)
+      moves << Piece.offset_square(square, -2, 1)
+      moves << Piece.offset_square(square, -1, 2)
+      moves
     end
     
   end

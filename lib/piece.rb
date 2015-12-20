@@ -6,6 +6,11 @@ module Chess
       [:white, :black]
     end
     
+    def self.offset_square(from, columns, rows)
+      column, row = from[0].upcase, from[1]
+      "#{(column.ord + columns).chr}#{row.to_i + rows}"
+    end
+    
     attr_reader :colour
     
     def initialize(colour)

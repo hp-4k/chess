@@ -17,9 +17,9 @@ module Chess
       end
     end
     
-    describe "#valid_move" do
+    describe "#valid_moves" do
       it "is implemented in a subclass" do
-        expect { described_class.new(:white).valid_moves("board", "square") }.not_to raise_error
+        expect { described_class.new(:white).valid_moves("A1") }.not_to raise_error
       end
     end
   
