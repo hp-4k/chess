@@ -6,5 +6,6 @@ require_relative "../lib/bishop.rb"
 require_relative "../lib/rook.rb"
 require_relative "../lib/queen.rb"
 require_relative "../lib/king.rb"
+require_relative "../lib/game.rb"
 
 require 'shared_examples/piece_shared_examples'
