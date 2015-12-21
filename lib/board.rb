@@ -36,7 +36,7 @@ module Chess
         end
         $stdout.print "\n"
       end
-      $stdout.puts "  A B C D E F G H"
+      $stdout.puts "  \uff21 \uff22 \uff23 \uff24 \uff25 \uff26 \uff27 \uff28".encode("utf-8")
     end
     
     private
@@ -44,7 +44,7 @@ module Chess
       attr_accessor :squares
       
       def print_square(square)
-        $stdout.print(get_square(square) || "_")
+        $stdout.print(get_square(square) || "\uFF3F".encode("utf-8"))
       end
     
     class InvalidSquareError < ArgumentError
