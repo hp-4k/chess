@@ -6,11 +6,6 @@ module Chess
       [:white, :black]
     end
     
-    def self.offset_square(from, columns, rows)
-      column, row = from[0].upcase, from[1]
-      "#{(column.ord + columns).chr}#{row.to_i + rows}"
-    end
-    
     attr_reader :colour
     
     def initialize(colour)
@@ -22,6 +17,17 @@ module Chess
       raise NotImplementedError
     end
     
+    private
+    
+      def valid_square?(square)
+        square[0].upcase.between?('A', 'H') && square[1].to_i.between?(1, 8)
+      end
+    
+      def offset_square(from, columns, rows)
+        column, row = from[0].upcase, from[1]
+        "#{(column.ord + columns).chr}#{row.to_i + rows}"
+      end
+      
   end
 
 end
