@@ -5,6 +5,7 @@ module Chess
   RSpec.describe King do
   
     let(:king) { King.new(:white) }
+    let(:black_king) { King.new(:black) }
     
     it_behaves_like "a piece"
   
@@ -21,7 +22,14 @@ module Chess
         end
       end
     end
-  
+    
+    describe "#to_s" do
+      it "prints a correct unicode character" do
+        expect(king.to_s).to eq "\u2654".encode("utf-8")
+        expect(black_king.to_s).to eq "\u265A".encode("utf-8")
+      end
+    end
+    
   end
 
 end

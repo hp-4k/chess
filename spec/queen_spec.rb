@@ -5,6 +5,7 @@ module Chess
   RSpec.describe Queen do
   
     let(:queen) { Queen.new(:white) }
+    let(:black_queen) { Queen.new(:black) }
     
     it_behaves_like "a piece"
   
@@ -30,7 +31,14 @@ module Chess
         end
       end
     end
-  
+    
+    describe "#to_s" do
+      it "prints a correct unicode character" do
+        expect(queen.to_s).to eq "\u2655".encode("utf-8")
+        expect(black_queen.to_s).to eq "\u265B".encode("utf-8")
+      end
+    end
+    
   end
 
 end

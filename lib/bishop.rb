@@ -50,7 +50,14 @@ module Chess
           i += 1
         end
       end
+     
+      def white_symbol
+        "\u2657"
+      end
       
+      def black_symbol
+         "\u265D"
+      end
   end
 
 end

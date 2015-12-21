@@ -27,5 +27,13 @@ module Chess
         moves << offset_square(square, 1, -1) if board_state[offset_square(square, 1, -1)]
         moves << offset_square(square, -1, -1) if board_state[offset_square(square, -1, -1)]
       end
+      
+      def white_symbol
+        "\u2659"
+      end
+      
+      def black_symbol
+         "\u265F"
+      end
   end
 end

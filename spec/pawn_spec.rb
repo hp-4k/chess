@@ -78,7 +78,14 @@ module Chess
         end
       end
     end
-  
+    
+    describe "#to_s" do
+      it "prints a correct unicode character" do
+        expect(white_pawn.to_s).to eq "\u2659".encode("utf-8")
+        expect(black_pawn.to_s).to eq "\u265F".encode("utf-8")
+      end
+    end
+      
   end
 
 end

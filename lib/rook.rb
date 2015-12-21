@@ -51,6 +51,13 @@ module Chess
         end
       end
       
+      def white_symbol
+        "\u2656"
+      end
+      
+      def black_symbol
+         "\u265C"
+      end
   end
 
 end

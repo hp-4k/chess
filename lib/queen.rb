@@ -90,6 +90,14 @@ module Chess
           i += 1
         end
       end
+     
+      def white_symbol
+        "\u2655"
+      end
+      
+      def black_symbol
+         "\u265B"
+      end
   end
 
 end

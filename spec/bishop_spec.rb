@@ -5,6 +5,7 @@ module Chess
   RSpec.describe Bishop do
   
     let(:bishop) { Bishop.new(:white) }
+    let(:black_bishop) { Bishop.new(:black) }
     
     it_behaves_like "a piece"
   
@@ -26,7 +27,14 @@ module Chess
         end
       end
     end
-  
+    
+    describe "#to_s" do
+      it "prints a correct unicode character" do
+        expect(bishop.to_s).to eq "\u2657".encode("utf-8")
+        expect(black_bishop.to_s).to eq "\u265D".encode("utf-8")
+      end
+    end
+    
   end
 
 end

@@ -17,6 +17,10 @@ module Chess
       raise NotImplementedError
     end
     
+    def to_s
+      (colour == :white ? white_symbol : black_symbol).encode("utf-8")
+    end
+    
     private
     
       def valid_square?(square)
@@ -26,6 +30,14 @@ module Chess
       def offset_square(from, columns, rows)
         column, row = from[0].upcase, from[1]
         "#{(column.ord + columns).chr}#{row.to_i + rows}"
+      end
+      
+      def white_symbol
+        raise NotImplementedError
+      end
+      
+      def black_symbol
+        raise NotImplementedError
       end
       
   end
