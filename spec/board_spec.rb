@@ -89,6 +89,22 @@ END_STRING
       end
     end
     
+    describe "#white_king_location" do
+      it "returns the location of the white king" do
+        board.place_piece(King.new(:white), "D5")
+        board.place_piece(King.new(:black), "A3")
+        expect(board.white_king_location).to eq "D5"
+      end
+    end
+    
+    describe "#black_king_location" do
+      it "returns the location of the black king" do
+        board.place_piece(King.new(:white), "D5")
+        board.place_piece(King.new(:black), "A3")
+        expect(board.black_king_location).to eq "A3"
+      end
+    end
+    
   end
 
 end

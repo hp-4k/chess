@@ -43,6 +43,14 @@ module Chess
       squares
     end
     
+    def white_king_location
+      squares.select { |square, piece| piece.is_a?(King) && piece.colour == :white }.keys.first
+    end
+    
+    def black_king_location
+      squares.select { |square, piece| piece.is_a?(King) && piece.colour == :black }.keys.first
+    end
+    
     private
     
       attr_accessor :squares
