@@ -70,16 +70,17 @@ module Chess
         
         it "prints the board to standard output" do
           expected_output = <<END_STRING
-8 _ _ _ _ _ _ _ _
-7 _ _ _ _ _ _ _ _
-6 _ _ _ _ _ _ _ _
-5 _ _ _ _ _ _ _ _
-4 _ _ _ _ _ _ _ _
-3 _ _ _ _ _ _ _ _
-2 _ _ _ _ _ _ _ _
-1 _ _ _ _ _ _ _ _
-  A B C D E F G H
+8 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+7 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+6 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+5 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+4 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+3 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+2 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+1 \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F \uFF3F
+  \uff21 \uff22 \uff23 \uff24 \uff25 \uff26 \uff27 \uff28
 END_STRING
+          expected_output.encode("utf-8")
           expect { board.show_board }.to output(expected_output).to_stdout
         end
         
