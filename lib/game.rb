@@ -16,15 +16,23 @@ module Chess
     
     def initialize(board, options = {})
       @board = board
-      @current_player = :white
-      @other_player = :black
+      initialize_players(options[:black_starts])
       set_up_board(options[:board_state])
     end
     
-    #def 
+    def move(from, to)
+      check_move_for_errors(from, to)
+      piece = board.get_square(from)
+      board.place_piece(nil, from)
+      board.place_piece(piece, to)
+    end
     
     private
     
+      def initialize_players(black_starts)
+        @current_player, @other_player = black_starts ? [:black, :white] : [:white, :black]
+      end
+      
       def set_up_board(board_state)
         board_state ? add_pieces_to_board(board_state) : default_set_up
       end
@@ -63,6 +71,17 @@ module Chess
         module_name = self.class.name.split("::").first + "::"
         Object.const_get(module_name + piece_class)
       end
+      
+      def check_move_for_errors(from, to)
+        raise InvalidMoveError unless piece = board.get_square(from)
+        raise InvalidMoveError if piece.colour != current_player
+        raise InvalidMoveError unless Board.valid_square?(to)
+        raise InvalidMoveError unless piece.possible_moves(from, board.state).include?(to)
+        raise InvalidMoveError if board.get_square(to) && board.get_square(to).colour == current_player
+      end
+    
+    class InvalidMoveError < StandardError
+    end
     
   end
 

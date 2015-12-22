@@ -39,6 +39,10 @@ module Chess
       $stdout.puts "  \uff21 \uff22 \uff23 \uff24 \uff25 \uff26 \uff27 \uff28".encode("utf-8")
     end
     
+    def state
+      squares
+    end
+    
     private
     
       attr_accessor :squares
