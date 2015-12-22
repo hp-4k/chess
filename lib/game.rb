@@ -12,16 +12,24 @@ module Chess
 
   class Game
     
-    attr_reader :board
+    attr_reader :board, :current_player, :other_player
     
-    def initialize(board)
+    def initialize(board, options = {})
       @board = board
-      set_up_board
+      @current_player = :white
+      @other_player = :black
+      set_up_board(options[:board_state])
     end
+    
+    #def 
     
     private
     
-      def set_up_board
+      def set_up_board(board_state)
+        board_state ? add_pieces_to_board(board_state) : default_set_up
+      end
+      
+      def default_set_up
         # white pieces
         'A'.upto('H') { |col| board.place_piece(Pawn.new(:white), col + '2') }
         board.place_piece(Rook.new(:white), "A1")
@@ -42,6 +50,18 @@ module Chess
         board.place_piece(Bishop.new(:black), "F8")
         board.place_piece(Knight.new(:black), "G8")
         board.place_piece(Rook.new(:black), "H8")
+      end
+      
+      def add_pieces_to_board(board_state)
+        board_state.each do |square, piece|
+          piece_colour, piece_class = piece.split
+          board.place_piece(find_class(piece_class).new(piece_colour.to_sym), square)
+        end
+      end
+      
+      def find_class(piece_class)
+        module_name = self.class.name.split("::").first + "::"
+        Object.const_get(module_name + piece_class)
       end
     
   end
