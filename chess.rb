@@ -7,7 +7,7 @@ require_relative 'lib/knight'
 require_relative 'lib/pawn'
 require_relative 'lib/queen'
 require_relative 'lib/rook'
-require 'YAML'
+require 'yaml'
 include Chess
 
 SAVE_FILE = "saved_game.sav"
