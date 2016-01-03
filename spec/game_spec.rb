@@ -85,6 +85,26 @@ END_STRING
           game.move("E7", "E5")
           expect(game.current_player).to eq :white
         end
+        
+        it "does not throw an error when the move gets the king out of check by moving to a safe square" do
+          pieces = {
+            "D4" => "white King",
+            "H4" => "black Queen",
+            "D6" => "white Knight"
+          }
+          game = Game.new(Board.new, board_state: pieces)
+          expect { game.move("D4", "D3") }.not_to raise_error
+        end
+        
+        it "does not throw an error when the move gets the king out of check by obsuring the attacker" do
+          pieces = {
+            "D4" => "white King",
+            "H4" => "black Queen",
+            "D6" => "white Knight"
+          }
+          game = Game.new(Board.new, board_state: pieces)
+          expect { game.move("D6", "E4") }.not_to raise_error
+        end
       end
       
       context "when move is invalid" do
@@ -114,6 +134,16 @@ END_STRING
         it "throws InvalidMoveError when attempting to capture own piece" do
           game = Game.new(Board.new)
           expect { game.move("A1", "A2") }.to raise_error Game::InvalidMoveError
+        end
+        
+        it "throws InvalidMoveError when active player's king remains checked" do
+          pieces = {
+            "G3" => "white King",
+            "G7" => "white Rook",
+            "D7" => "black King"
+          }
+          game = Game.new(Board.new, board_state: pieces, black_starts: true)
+          expect { game.move("D7", "C7") }.to raise_error Game::InvalidMoveError  
         end
         
       end

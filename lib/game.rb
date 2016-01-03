@@ -22,9 +22,7 @@ module Chess
     
     def move(from, to)
       check_move_for_errors(from, to)
-      piece = board.get_square(from)
-      board.place_piece(nil, from)
-      board.place_piece(piece, to)
+      move_piece(from, to)
       swap_players
     end
     
@@ -74,11 +72,45 @@ module Chess
       end
       
       def check_move_for_errors(from, to)
+        # starting square is not empty
         raise InvalidMoveError unless piece = board.get_square(from)
+        # can't move opponent's piece
         raise InvalidMoveError if piece.colour != current_player
+        # target square has to be on board
         raise InvalidMoveError unless Board.valid_square?(to)
+        # can only move within the piece's range
         raise InvalidMoveError unless piece.possible_moves(from, board.state).include?(to)
+        # can't take own piece
         raise InvalidMoveError if board.get_square(to) && board.get_square(to).colour == current_player
+        # can't leave own king in check
+        raise InvalidMoveError if check_king_in_check(from, to)
+        
+      end
+      
+      def check_king_in_check(from, to)
+        to_piece = board.get_square(to)
+        
+        # do the move
+        move_piece(from, to)
+        
+        # check if king in check
+        if current_player == :white
+          in_check = board.white_king_location && board.in_check?(board.white_king_location, current_player)
+        else
+          in_check = board.black_king_location && board.in_check?(board.black_king_location, current_player)
+        end
+        
+        # undo the move
+        move_piece(to, from)
+        board.place_piece(to_piece, to)
+        
+        in_check
+      end
+      
+      def move_piece(from, to)
+        piece = board.get_square(from)
+        board.place_piece(nil, from)
+        board.place_piece(piece, to)
       end
       
       def swap_players

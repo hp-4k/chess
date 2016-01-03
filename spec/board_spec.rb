@@ -177,6 +177,28 @@ END_STRING
         board.place_piece(Rook.new(:white), "C8")
         expect(board.in_check?("D4", :white)).to be false
       end
+      
+      it "returns false when vertical line of attack is obscured" do
+        board.place_piece(King.new(:white), "E1")
+        board.place_piece(Pawn.new(:white), "E2")
+        board.place_piece(Queen.new(:black), "E7")
+        expect(board.in_check?("E1", :white)).to be false
+      end
+      
+      it "returns false when vertical line of attack is obscured" do
+        board.place_piece(King.new(:black), "E8")
+        board.place_piece(Pawn.new(:black), "F7")
+        board.place_piece(Queen.new(:white), "H5")
+        expect(board.in_check?("E8", :black)).to be false
+      end
+      
+      it "returns false when 2 kings are > 1 squares away from each other" do
+        board.place_piece(King.new(:white), "E1")
+        board.place_piece(King.new(:black), "E8")
+        expect(board.in_check?("E1", :white)).to be false
+        expect(board.in_check?("E8", :black)).to be false
+      end
+      
     end
     
   end
