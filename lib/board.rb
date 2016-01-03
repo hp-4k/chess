@@ -51,12 +51,96 @@ module Chess
       squares.select { |square, piece| piece.is_a?(King) && piece.colour == :black }.keys.first
     end
     
+    def in_check?(square, piece_colour)
+      return true if in_check_n?(square, piece_colour)
+      return true if in_check_s?(square, piece_colour)
+      return true if in_check_w?(square, piece_colour)
+      return true if in_check_e?(square, piece_colour)
+      return true if in_check_ne?(square, piece_colour)
+      return true if in_check_se?(square, piece_colour)
+      return true if in_check_sw?(square, piece_colour)
+      return true if in_check_nw?(square, piece_colour)
+      return true if in_check_from_knight?(square, piece_colour)
+      return true if in_check_from_pawn?(square, piece_colour)
+      false
+    end
+    
     private
     
       attr_accessor :squares
       
       def print_square(square)
         $stdout.print(get_square(square) || "\uFF3F".encode("utf-8"))
+      end
+    
+      def in_check_n?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, 0, 1)
+        return true if [Rook, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_n?(next_square, piece_colour)
+      end
+      
+      def in_check_s?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, 0, -1)
+        return true if [Rook, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_s?(next_square, piece_colour)
+      end
+      
+      def in_check_w?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, -1, 0)
+        return true if [Rook, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_w?(next_square, piece_colour)
+      end
+      
+      def in_check_e?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, 1, 0)
+        return true if [Rook, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_e?(next_square, piece_colour)
+      end
+      
+      def in_check_ne?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, 1, 1)
+        return true if [Bishop, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_ne?(next_square, piece_colour)
+      end
+      
+      def in_check_se?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, 1, -1)
+        return true if [Bishop, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_se?(next_square, piece_colour)
+      end
+      
+      def in_check_sw?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, -1, -1)
+        return true if [Bishop, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_sw?(next_square, piece_colour)
+      end
+      
+      def in_check_nw?(square, piece_colour)
+        return false unless next_square = self.class.offset_square(square, -1, 1)
+        return true if [Bishop, Queen, King].include?(squares[next_square].class) &&
+          squares[next_square].colour != piece_colour
+        in_check_nw?(next_square, piece_colour)
+      end
+      
+      def in_check_from_knight?(square, piece_colour)
+        squares_to_check = Knight.new(:white).possible_moves(square, squares)
+        squares_to_check.any? { |square| squares[square].is_a?(Knight) && squares[square].colour != piece_colour }
+      end
+      
+      def in_check_from_pawn?(square, piece_colour)
+        if piece_colour == :white
+          squares_to_check = [self.class.offset_square(square, 1,1), self.class.offset_square(square, -1,1)]
+        else
+          squares_to_check = [self.class.offset_square(square, 1,-1), self.class.offset_square(square, -1,-1)]
+        end
+        squares_to_check.any? { |square| squares[square].is_a?(Pawn) && squares[square].colour != piece_colour }
       end
     
     class InvalidSquareError < ArgumentError

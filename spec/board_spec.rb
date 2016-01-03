@@ -105,6 +105,80 @@ END_STRING
       end
     end
     
+    describe "#in_check?" do
+      it "returns true when a field is in check from N" do
+        board.place_piece(Rook.new(:black), "E8")
+        expect(board.in_check?("E4", :white)).to be true
+      end
+      
+      it "returns true when a field is in check from NE" do
+        board.place_piece(Bishop.new(:white), "H7")
+        expect(board.in_check?("E4", :black)).to be true
+      end
+      
+      it "returns true when a field is in check from E" do
+        board.place_piece(Rook.new(:white), "H7")
+        expect(board.in_check?("B7", :black)).to be true
+      end
+      
+      it "returns true when a field is in check from SE" do
+        board.place_piece(Queen.new(:white), "E3")
+        expect(board.in_check?("B6", :black)).to be true
+      end
+      
+      it "returns true when a field is in check from S" do
+        board.place_piece(King.new(:black), "E3")
+        expect(board.in_check?("E4", :white)).to be true
+      end
+      
+      it "returns true when a field is in check from SW" do
+        board.place_piece(King.new(:black), "E3")
+        expect(board.in_check?("F4", :white)).to be true
+      end
+      
+      it "returns true when a field is in check from W" do
+        board.place_piece(Rook.new(:black), "E3")
+        expect(board.in_check?("H3", :white)).to be true
+      end
+      
+      it "returns true when a field is in check from NW" do
+        board.place_piece(Bishop.new(:black), "E3")
+        expect(board.in_check?("G1", :white)).to be true
+      end
+      
+      it "returns true when a field is in check from a knight" do
+        board.place_piece(Knight.new(:black), "C3")
+        expect(board.in_check?("E4", :white)).to be true
+      end
+      
+      it "returns true when a black piece is in check from a white pawn" do
+        board.place_piece(Pawn.new(:white), "C3")
+        expect(board.in_check?("D4", :black)).to be true
+      end
+      
+      it "returns true when a white piece is in check from a black pawn" do
+        board.place_piece(Pawn.new(:black), "C6")
+        expect(board.in_check?("B5", :white)).to be true
+      end
+      
+      it "returns false when a field is not attacked by any pieces" do
+        board.place_piece(Bishop.new(:white), "A1")
+        board.place_piece(Queen.new(:white), "A2")
+        board.place_piece(Knight.new(:white), "G7")
+        expect(board.in_check?("B8", :black)).to be false
+      end
+      
+      it "returns false when a field is only attacked by pieces of own colour" do
+        board.place_piece(Pawn.new(:white), "C3")
+        board.place_piece(Knight.new(:white), "E2")
+        board.place_piece(King.new(:white), "C2")
+        board.place_piece(Queen.new(:white), "A5")
+        board.place_piece(Bishop.new(:white), "A1")
+        board.place_piece(Rook.new(:white), "C8")
+        expect(board.in_check?("D4", :white)).to be false
+      end
+    end
+    
   end
 
 end
