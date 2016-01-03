@@ -136,7 +136,7 @@ END_STRING
           expect { game.move("A1", "A2") }.to raise_error Game::InvalidMoveError
         end
         
-        it "throws InvalidMoveError when active player's king remains checked" do
+        it "throws InvalidMoveError when active player's king remains in check" do
           pieces = {
             "G3" => "white King",
             "G7" => "white Rook",
