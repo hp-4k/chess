@@ -25,6 +25,7 @@ module Chess
       piece = board.get_square(from)
       board.place_piece(nil, from)
       board.place_piece(piece, to)
+      swap_players
     end
     
     private
@@ -78,6 +79,10 @@ module Chess
         raise InvalidMoveError unless Board.valid_square?(to)
         raise InvalidMoveError unless piece.possible_moves(from, board.state).include?(to)
         raise InvalidMoveError if board.get_square(to) && board.get_square(to).colour == current_player
+      end
+      
+      def swap_players
+        @current_player, @other_player = @other_player, @current_player
       end
     
     class InvalidMoveError < StandardError

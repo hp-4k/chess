@@ -77,6 +77,14 @@ END_STRING
           expect(game.board.get_square("D4")).to be nil
           expect(game.board.get_square("E3").colour).to eq :black
         end
+        
+        it "swaps the current player" do
+          game = Game.new(Board.new)
+          game.move("E2", "E4")
+          expect(game.current_player).to eq :black
+          game.move("E7", "E5")
+          expect(game.current_player).to eq :white
+        end
       end
       
       context "when move is invalid" do
@@ -107,8 +115,6 @@ END_STRING
           game = Game.new(Board.new)
           expect { game.move("A1", "A2") }.to raise_error Game::InvalidMoveError
         end
-        
-        it "throws InvalidMoveError when active player's king remains checked"
         
       end
     end
