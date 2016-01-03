@@ -20,6 +20,7 @@ module Chess
     def place_piece(piece, square)
       raise InvalidSquareError unless Board.valid_square?(square)
       squares[square] = piece
+      squares.delete(square) unless piece
     end
     
     def get_square(square)
@@ -64,6 +65,17 @@ module Chess
       return true if in_check_from_pawn?(square, piece_colour)
       return true if in_check_from_king?(square, piece_colour)
       false
+    end
+    
+    def get_all_moves(colour)
+      all_pieces = squares.select { |square, piece| piece.colour == colour }
+      all_moves = []
+      all_pieces.each do |from, piece|
+        piece.possible_moves(from, state).each do |to|
+          all_moves << [from, to]
+        end
+      end
+      all_moves
     end
     
     private

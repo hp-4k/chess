@@ -26,6 +26,24 @@ module Chess
       swap_players
     end
     
+    def check_mate?
+      if board.in_check?(board.white_king_location, :white)
+        checked_colour = :white
+        all_moves = board.get_all_moves(:white)
+      elsif board.in_check?(board.black_king_location, :black)
+        checked_colour = :black
+        all_moves = board.get_all_moves(:black)
+      else
+        return false
+      end
+      
+      if all_moves.any? { |move| saves_from_check?(move) }
+        false
+      else
+        checked_colour
+      end
+    end
+    
     private
     
       def initialize_players(black_starts)
@@ -115,6 +133,20 @@ module Chess
       
       def swap_players
         @current_player, @other_player = @other_player, @current_player
+      end
+      
+      def saves_from_check?(move)
+        from, to = move
+        # temporarily swap players to investigate possible opponent's moves
+        swap_players
+        begin
+          check_move_for_errors(from, to)
+        rescue
+          return false
+        ensure
+          swap_players
+        end
+        true
       end
     
     class InvalidMoveError < StandardError

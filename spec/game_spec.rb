@@ -149,6 +149,59 @@ END_STRING
       end
     end
     
+    describe "#check_mate?" do
+      it "returns :black when black player is in check mate" do
+        game = Game.new(Board.new)
+        game.move("E2", "E4")
+        game.move("E7", "E5")
+        game.move("D1", "H5")
+        game.move("B8", "C6")
+        game.move("F1", "C4")
+        game.move("G8", "F6")
+        game.move("H5", "F7")
+        expect(game.check_mate?).to eq :black
+      end
+      
+      it "returns :white when white player is in check mate" do
+        pieces = {
+          "F2" => "black Queen",
+          "G3" => "black King",
+          "F1" => "white King"
+        }
+        game = Game.new(Board.new, board_state: pieces)
+        expect(game.check_mate?).to eq :white
+      end
+      
+      it "returns false when no check mate on the board" do
+        pieces = {
+          "F2" => "white King",
+          "B2" => "black King"
+        }
+        game = Game.new(Board.new, board_state: pieces)
+        expect(game.check_mate?).to be false
+      end
+      
+      it "returns false when check on board but king can move to a safe square" do
+        pieces = {
+          "A2" => "white King",
+          "F2" => "black Queen",
+          "G2" => "black King"
+        }
+        game = Game.new(Board.new, board_state: pieces, black_starts: true) # black starts to simulate that black player has just moved
+        expect(game.check_mate?).to be false
+      end
+      
+      it "returns false when check on board but attacking piece can be taken" do
+        pieces = {
+          "F1" => "white King",
+          "F8" => "white Rook",
+          "F2" => "black Queen",
+          "G3" => "black King"
+        }
+        game = Game.new(Board.new, board_state: pieces, black_starts: true) # black starts to simulate that black player has just moved
+        expect(game.check_mate?).to be false
+      end
+      
+    end
   end
-  
 end

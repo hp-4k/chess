@@ -198,7 +198,6 @@ END_STRING
         expect(board.in_check?("E1", :white)).to be false
         expect(board.in_check?("E8", :black)).to be false
       end
-      
     end
     
   end
