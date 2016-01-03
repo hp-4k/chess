@@ -12,6 +12,8 @@ module Chess
       moves << offset_square(square, -1, 0)
       moves << offset_square(square, -1, 1)
       moves << offset_square(square, 0, 1)
+      moves << offset_square(square, 2, 0)
+      moves << offset_square(square, -2, 0)
       moves.select { |move| valid_square?(move) }
     end
     
