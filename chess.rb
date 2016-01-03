@@ -46,7 +46,7 @@ def play_game(game)
         save_game(game)
         redo
       else
-        from, to = input, split
+        from, to = input.upcase.split
         game.move(from, to)
       end
     rescue => e
