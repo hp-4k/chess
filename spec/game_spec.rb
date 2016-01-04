@@ -201,6 +201,49 @@ END_STRING
           expect(game.board.get_square("E4")).to be nil
           expect(game.board.get_square("E3")).to be_a Pawn
         end
+        
+        context "when a pawn reaches last row" do
+          
+          it "prompts the player to pick a piece" do
+            pieces = {
+              "A7" => "white Pawn",
+              "A1" => "white King",
+              "D7" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            allow(STDIN).to receive(:gets).and_return('1') # 1 => Queen
+            expect { game.move("A7", "A8") }.to output(/Pick a piece/).to_stdout
+          end
+          
+          it "replaces a white pawn with a white piece of player's choice" do
+            pieces = {
+              "A7" => "white Pawn",
+              "A1" => "white King",
+              "D7" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            allow(STDOUT).to receive(:write) # supresses stdout
+            allow(STDIN).to receive(:gets).and_return('1') # 1 => Queen
+            game.move("A7", "A8")
+            expect(game.board.get_square("A8")).to be_a Queen
+            expect(game.board.get_square("A8").colour).to eq :white
+          end
+          
+          it "replaces a black pawn with a black piece of player's choice" do
+            pieces = {
+              "D2" => "black Pawn",
+              "A1" => "white King",
+              "D7" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces, black_starts: true)
+            allow(STDOUT).to receive(:write) # supresses stdout
+            allow(STDIN).to receive(:gets).and_return('4') # 4 => Knight
+            game.move("D2", "D1")
+            expect(game.board.get_square("D1")).to be_a Knight
+            expect(game.board.get_square("D1").colour).to eq :black
+          end
+          
+        end
       end
       
       context "when move is invalid" do
@@ -218,7 +261,6 @@ END_STRING
           game = Game.new(Board.new)
           expect { game.move("A1", "A0") }.to raise_error Game::InvalidMoveError
         end
-        
         
         it "throws InvalidMoveError when target square can't be reached" do
           game = Game.new(Board.new)
@@ -384,6 +426,18 @@ END_STRING
         }
         game = Game.new(Board.new, board_state: pieces, black_starts: true) # black starts to simulate that black player has just moved
         expect(game.check_mate?).to be false
+      end
+      
+      it "does not consider pawn promotion when looking for possible ways to get out of check" do
+        pieces = {
+          "C7" => "white Pawn",
+          "A8" => "white King",
+          "H8" => "black King",
+          "G8" => "black Queen"
+        }
+        game = Game.new(Board.new, board_state: pieces, black_starts: true)
+        allow(STDIN).to receive(:gets).and_return('1')
+        expect { game.check_mate? }.not_to output.to_stdout
       end
       
     end

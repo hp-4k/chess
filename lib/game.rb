@@ -8,7 +8,7 @@ require_relative "queen.rb"
 require_relative "king.rb"
 require_relative "castling_monitor.rb"
 require_relative "en_passant_monitor.rb"
-
+require_relative "promotion_monitor.rb"
 
 module Chess
 
@@ -20,6 +20,7 @@ module Chess
       @board = board
       @castling_monitor = CastlingMonitor.new(board)
       @en_passant_monitor = EnPassantMonitor.new(board)
+      @promotion_monitor = PromotionMonitor.new(board)
       initialize_players(options[:black_starts])
       set_up_board(options[:board_state])
     end
@@ -99,7 +100,7 @@ module Chess
         Object.const_get(module_name + piece_class)
       end
       
-      def check_move_for_errors(from, to)
+      def check_move_for_errors(from, to, options = {})
         # starting square is not empty
         raise InvalidMoveError unless piece = board.get_square(from)
         # can't move opponent's piece
@@ -112,8 +113,10 @@ module Chess
         raise InvalidMoveError if board.get_square(to) && board.get_square(to).colour == current_player
         # can't leave own king in check
         raise InvalidMoveError if check_king_in_check(from, to)
+        
         @castling_monitor.check_move(from, to)
         @en_passant_monitor.check_move(from, to)
+        @promotion_monitor.check_move(from, to) unless options[:skip_promotion]
       end
       
       def check_king_in_check(from, to)
@@ -151,7 +154,7 @@ module Chess
         # temporarily swap players to investigate possible opponent's moves
         swap_players
         begin
-          check_move_for_errors(from, to)
+          check_move_for_errors(from, to, skip_promotion: true)
         rescue
           return false
         ensure
