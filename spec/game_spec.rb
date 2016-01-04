@@ -335,6 +335,17 @@ END_STRING
         expect(game.check_mate?).to be false
       end
       
+      it "returns false when check on board but attacking piece can be obscured" do
+        pieces = {
+          "F1" => "white King",
+          "H7" => "white Rook",
+          "F8" => "black Queen",
+          "G3" => "black King"
+        }
+        game = Game.new(Board.new, board_state: pieces, black_starts: true) # black starts to simulate that black player has just moved
+        expect(game.check_mate?).to be false
+      end
+      
     end
   end
 end
