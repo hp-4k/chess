@@ -32,20 +32,14 @@ module Chess
     end
     
     def check_mate?
-      if board.in_check?(board.white_king_location, :white)
-        checked_colour = :white
-        all_moves = board.get_all_moves(:white)
-      elsif board.in_check?(board.black_king_location, :black)
-        checked_colour = :black
-        all_moves = board.get_all_moves(:black)
-      else
-        return false
-      end
+      all_moves = board.get_all_moves(current_player)
       
-      if all_moves.any? { |move| saves_from_check?(move) }
+      if all_moves.any? { |move| valid_move?(move) }
         false
+      elsif current_player == :white ? board.in_check?(board.white_king_location, :white) : board.in_check?(board.black_king_location, :black)
+        current_player
       else
-        checked_colour
+        :stalemate
       end
     end
     
@@ -149,16 +143,12 @@ module Chess
         @current_player, @other_player = @other_player, @current_player
       end
       
-      def saves_from_check?(move)
+      def valid_move?(move)
         from, to = move
-        # temporarily swap players to investigate possible opponent's moves
-        swap_players
         begin
           check_move_for_errors(from, to, skip_promotion: true)
         rescue
           return false
-        ensure
-          swap_players
         end
         true
       end

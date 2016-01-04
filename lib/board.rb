@@ -165,7 +165,15 @@ module Chess
       end
       
       def in_check_from_king?(square, piece_colour)
-        squares_to_check = King.new(:white).possible_moves(square, squares)
+        squares_to_check = []
+        squares_to_check << self.class.offset_square(square, 1, 0)
+        squares_to_check << self.class.offset_square(square, 1, -1)
+        squares_to_check << self.class.offset_square(square, 0, -1)
+        squares_to_check << self.class.offset_square(square, -1, -1)
+        squares_to_check << self.class.offset_square(square, -1, 0)
+        squares_to_check << self.class.offset_square(square, -1, 1)
+        squares_to_check << self.class.offset_square(square, 0, 1)
+        squares_to_check << self.class.offset_square(square, 1, 1)
         squares_to_check.any? { |square| squares[square].is_a?(King) && squares[square].colour != piece_colour }
       end
     

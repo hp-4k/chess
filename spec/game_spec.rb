@@ -440,6 +440,35 @@ END_STRING
         expect { game.check_mate? }.not_to output.to_stdout
       end
       
+      it "returns :stalemate when white player is in stalemate" do
+        pieces = {
+          "A3" => "white Pawn",
+          "B4" => "white Pawn",
+          "A4" => "black Pawn",
+          "B5" => "black Pawn",
+          "H1" => "white King",
+          "H8" => "black King",
+          "F2" => "black Queen"
+        }
+        game = Game.new(Board.new, board_state: pieces)
+        expect(game.check_mate?).to eq :stalemate
+      end
+      
+      it "returns :stalemate when black player is in stalemate" do
+        pieces = {
+          "A3" => "white Pawn",
+          "B4" => "white Pawn",
+          "A4" => "black Pawn",
+          "B5" => "black Pawn",
+          "H1" => "white King",
+          "H8" => "black King",
+          "G1" => "white Rook",
+          "F5" => "white Bishop"
+        }
+        game = Game.new(Board.new, board_state: pieces, black_starts: true)
+        expect(game.check_mate?).to eq :stalemate
+      end
+      
     end
   end
 end

@@ -161,6 +161,11 @@ END_STRING
         expect(board.in_check?("B5", :white)).to be true
       end
       
+      it "returns true when a field is in check from a black king" do
+        board.place_piece(King.new(:black), "G3")
+        expect(board.in_check?("F2", :white)).to be true
+      end
+      
       it "returns false when a field is not attacked by any pieces" do
         board.place_piece(Bishop.new(:white), "A1")
         board.place_piece(Queen.new(:white), "A2")

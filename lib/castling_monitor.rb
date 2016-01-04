@@ -22,6 +22,8 @@ module Chess
           black_short_castling
         elsif moving_piece.is_a?(King) && moving_piece.colour == :black && from == "E8" && to == "C8"
           black_long_castling
+        elsif moving_piece.is_a?(King) && (to == Board.offset_square(from, 2, 0) || to == Board.offset_square(from, -2, 0))
+          raise Game::InvalidMoveError
         else
           @possible_castlings[:white_short] = false if from == "E1" || from == "H1" || to == "H1"
           @possible_castlings[:white_long] = false if from == "E1" || from == "A1" || to == "A1"
