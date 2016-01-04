@@ -15,12 +15,12 @@ module Chess
         context "without pieces to capture" do
           it "returns correct moves for pawns in row #2" do
             board_state= {}
-            expect(white_pawn.possible_moves("F2", board_state).sort).to eq %w{ F3 F4 }.sort
+            expect(white_pawn.possible_moves("F2", board_state).sort).to eq %w{ F3 F4 G3 E3 }.sort
           end
           
           it "return correct moves for pawns in other rows" do
             board_state = {}
-            expect(white_pawn.possible_moves("B4", board_state).sort).to eq %w{ B5 }.sort
+            expect(white_pawn.possible_moves("B4", board_state).sort).to eq %w{ B5 A5 C5 }.sort
           end
         end
         
@@ -30,7 +30,7 @@ module Chess
               "B3" => true,
               "C4" => true
             }
-            expect(white_pawn.possible_moves("C2", board_state).sort).to eq %w{ C3 B3 }.sort
+            expect(white_pawn.possible_moves("C2", board_state).sort).to eq %w{ C3 B3 D3 }.sort
           end
           
           it "return correct moves for pawns in other rows" do
@@ -49,12 +49,12 @@ module Chess
         context "without pieces to capture" do
           it "returns correct moves for pawns in row #7" do
             board_state= {}
-            expect(black_pawn.possible_moves("F7", board_state).sort).to eq %w{ F6 F5 }.sort
+            expect(black_pawn.possible_moves("F7", board_state).sort).to eq %w{ F6 F5 E6 G6 }.sort
           end
           
           it "return correct moves for pawns in other rows" do
             board_state= {}
-            expect(black_pawn.possible_moves("E2", board_state).sort).to eq %w{ E1 }.sort
+            expect(black_pawn.possible_moves("E2", board_state).sort).to eq %w{ E1 D1 F1 }.sort
           end
         end
         
@@ -64,7 +64,7 @@ module Chess
               "F6" => true,
               "E5" => true
             }
-            expect(black_pawn.possible_moves("E7", board_state).sort).to eq %w{ F6 E6 }.sort
+            expect(black_pawn.possible_moves("E7", board_state).sort).to eq %w{ F6 E6 D6 }.sort
           end
           
           it "return correct moves for pawns in other rows" do

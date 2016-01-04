@@ -173,6 +173,34 @@ END_STRING
           expect(game.board.get_square("C8")).to be_a King
           expect(game.board.get_square("A8")).to be nil
         end
+        
+        it "carries out en passant with a white pawn" do
+          pieces = {
+            "E5" => "white Pawn",
+            "F7" => "black Pawn",
+            "E1" => "white King",
+            "E8" => "black King"
+          }
+          game = Game.new(Board.new, board_state: pieces, black_starts: true)
+          game.move("F7", "F5")
+          expect { game.move("E5", "F6") }.not_to raise_error
+          expect(game.board.get_square("F5")).to be nil
+          expect(game.board.get_square("F6")).to be_a Pawn
+        end
+        
+        it "carries out en passant with a black pawn" do
+          pieces = {
+            "E2" => "white Pawn",
+            "F4" => "black Pawn",
+            "E1" => "white King",
+            "E8" => "black King"
+          }
+          game = Game.new(Board.new, board_state: pieces)
+          game.move("E2", "E4")
+          expect { game.move("F4", "E3") }.not_to raise_error
+          expect(game.board.get_square("E4")).to be nil
+          expect(game.board.get_square("E3")).to be_a Pawn
+        end
       end
       
       context "when move is invalid" do
@@ -277,6 +305,18 @@ END_STRING
             expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
           end
           
+        end
+        
+        it "throws InvalidMoveError for an invalid en passant attempt" do
+          pieces = {
+            "E1" => "white King",
+            "E8" => "black King",
+            "B5" => "white Pawn",
+            "C6" => "black Pawn"
+          }
+          game = Game.new(Board.new, board_state: pieces, black_starts: true)
+          game.move("C6", "C5")
+          expect { game.move("B5", "C6") }.to raise_error Game::InvalidMoveError
         end
         
       end

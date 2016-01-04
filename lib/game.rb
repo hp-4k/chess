@@ -7,6 +7,7 @@ require_relative "rook.rb"
 require_relative "queen.rb"
 require_relative "king.rb"
 require_relative "castling_monitor.rb"
+require_relative "en_passant_monitor.rb"
 
 
 module Chess
@@ -18,6 +19,7 @@ module Chess
     def initialize(board, options = {})
       @board = board
       @castling_monitor = CastlingMonitor.new(board)
+      @en_passant_monitor = EnPassantMonitor.new(board)
       initialize_players(options[:black_starts])
       set_up_board(options[:board_state])
     end
@@ -111,6 +113,7 @@ module Chess
         # can't leave own king in check
         raise InvalidMoveError if check_king_in_check(from, to)
         @castling_monitor.check_move(from, to)
+        @en_passant_monitor.check_move(from, to)
       end
       
       def check_king_in_check(from, to)
