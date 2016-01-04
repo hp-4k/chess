@@ -105,6 +105,74 @@ END_STRING
           game = Game.new(Board.new, board_state: pieces)
           expect { game.move("D6", "E4") }.not_to raise_error
         end
+        
+        it "carries out white short castling" do
+          pieces = {
+            "E1" => "white King",
+            "A1" => "white Rook",
+            "H1" => "white Rook",
+            "E8" => "black King",
+            "A8" => "black Rook",
+            "H8" => "black Rook"
+          }
+          game = Game.new(Board.new, board_state: pieces)
+          expect { game.move("E1", "G1") }.not_to raise_error
+          expect(game.board.get_square("E1")).to be nil
+          expect(game.board.get_square("F1")).to be_a Rook
+          expect(game.board.get_square("G1")).to be_a King
+          expect(game.board.get_square("H1")).to be nil
+        end
+        
+        it "carries out white long castling" do
+          pieces = {
+            "E1" => "white King",
+            "A1" => "white Rook",
+            "H1" => "white Rook",
+            "E8" => "black King",
+            "A8" => "black Rook",
+            "H8" => "black Rook"
+          }
+          game = Game.new(Board.new, board_state: pieces)
+          expect { game.move("E1", "C1") }.not_to raise_error
+          expect(game.board.get_square("E1")).to be nil
+          expect(game.board.get_square("D1")).to be_a Rook
+          expect(game.board.get_square("C1")).to be_a King
+          expect(game.board.get_square("A1")).to be nil
+        end
+        
+        it "carries out black short castling" do
+          pieces = {
+            "E1" => "white King",
+            "A1" => "white Rook",
+            "H1" => "white Rook",
+            "E8" => "black King",
+            "A8" => "black Rook",
+            "H8" => "black Rook"
+          }
+          game = Game.new(Board.new, board_state: pieces, black_starts: true)
+          expect { game.move("E8", "G8") }.not_to raise_error
+          expect(game.board.get_square("E8")).to be nil
+          expect(game.board.get_square("F8")).to be_a Rook
+          expect(game.board.get_square("G8")).to be_a King
+          expect(game.board.get_square("H8")).to be nil
+        end
+        
+        it "carries out black long castling" do
+          pieces = {
+            "E1" => "white King",
+            "A1" => "white Rook",
+            "H1" => "white Rook",
+            "E8" => "black King",
+            "A8" => "black Rook",
+            "H8" => "black Rook"
+          }
+          game = Game.new(Board.new, board_state: pieces, black_starts: true)
+          expect { game.move("E8", "C8") }.not_to raise_error
+          expect(game.board.get_square("E8")).to be nil
+          expect(game.board.get_square("D8")).to be_a Rook
+          expect(game.board.get_square("C8")).to be_a King
+          expect(game.board.get_square("A8")).to be nil
+        end
       end
       
       context "when move is invalid" do
@@ -144,6 +212,71 @@ END_STRING
           }
           game = Game.new(Board.new, board_state: pieces, black_starts: true)
           expect { game.move("D7", "C7") }.to raise_error Game::InvalidMoveError  
+        end
+        
+        context "throws InvalidMoveError for invalid castling" do
+          
+          it "when king is in check" do
+            pieces = {
+              "E1" => "white King",
+              "H1" => "white Rook",
+              "E8" => "black King",
+              "E7" => "black Queen"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
+          end
+          
+          it "when king passes through a square in check" do
+            pieces = {
+              "E1" => "white King",
+              "H1" => "white Rook",
+              "E8" => "black King",
+              "F7" => "black Queen"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
+          end
+          
+          it "when king has moved before" do
+            pieces = {
+              "E1" => "white King",
+              "H1" => "white Rook",
+              "E8" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            game.move("E1", "D1")
+            game.move("E8", "D8")
+            game.move("D1", "E1")
+            game.move("D8", "C8")
+            expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
+          end
+          
+          it "when rook has moved before" do
+            pieces = {
+              "E1" => "white King",
+              "H1" => "white Rook",
+              "E8" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            game.move("H1", "H7")
+            game.move("E8", "D8")
+            game.move("H7", "H1")
+            game.move("D8", "C8")
+            expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
+          end
+          
+          it "when there is a piece in between" do
+            pieces = {
+              "E1" => "white King",
+              "H1" => "white Rook",
+              "F1" => "white Knight",
+              "E8" => "black King"
+            }
+            game = Game.new(Board.new, board_state: pieces)
+            expect { game.move("E1", "G1") }.to raise_error Game::InvalidMoveError
+          end
+          
         end
         
       end
