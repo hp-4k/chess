@@ -13,6 +13,7 @@ include Chess
 SAVE_FILE = "saved_game.sav"
 
 def display_main_menu
+  clear_screen
   puts "1. New game"
   puts "2. Load last saved state"
   input = gets.chomp
@@ -35,26 +36,47 @@ def save_game(game)
 end
 
 def play_game(game)
-  while true
+  clear_screen
+  until result = game.check_mate? do
     game.board.show_board
     begin
       puts "#{game.current_player.capitalize} player's move."
-      puts "Type 'save' to save game"
+      puts "Type 'save' to save game, 'exit' to exit."
       print "Enter your move: "
       input = gets.chomp
+      clear_screen
       if input.upcase == "SAVE"
         save_game(game)
+        puts "Game saved"
         redo
+      elsif input.upcase == "EXIT"
+        exit
       else
         from, to = input.upcase.split
         game.move(from, to)
       end
-    rescue => e
-      puts e.message
+    rescue
       puts "Invalid move! Try again."
       redo
     end
   end
+  
+  game.board.show_board
+  case result
+  when :white then puts "Black player wins!"
+  when :black then puts "White player wins!"
+  when :stalemate then puts "The game ended in a draw!"
+  end
+  
+  puts ""
+  puts "Press any key to exit"
+  gets
+  exit
+  
+end
+
+def clear_screen
+  Gem.win_platform? ? (system "cls") : (system "clear")
 end
 
 # executable code
